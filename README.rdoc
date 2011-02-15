@@ -1,0 +1,39 @@
+= Vidibus::AssetCacheBuster
+
+Rewrites cache buster for assets to a static string that is sure to be cached by proxy servers.
+
+Example:
+
+  /stylesheets/screen.css?1297772836
+
+will become
+
+  /stylesheets/screen.1297772836.css
+
+For more information about proxy caching, take a look at the documentation of Google's {Page Speed}[http://code.google.com/intl/de-DE/speed/page-speed/docs/caching.html#LeverageProxyCaching] tool.
+
+This gem is part of the open source service-oriented {video framework}[http://vidibus.org] Vidibus.
+
+
+== Installation
+
+Add the dependency to the Gemfile of your application:
+
+  gem "vidibus-asset_cache_buster"
+
+Then call bundle install on your console.
+
+To get this solution working, it is required to add some configuration to your Apache2 VirtualHost:
+
+  # Remove timesstamp from versioned static javascripts, stylesheets, and images.
+  # This requires a change in Rails so that assets will be included as image.12345.jpg
+  RewriteEngine on
+  RewriteRule ^/(javascripts|stylesheets|images)/(.+)\.(.+)\.(js|css|jp?g|gif|png)$ /$1/$2.$4 [L]
+
+
+This rewrite does not support SSL yet. Maybe Apache2 config should be improved...
+
+
+== Copyright
+
+Copyright (c) 2011 Andre Pankratz. See LICENSE for details.
